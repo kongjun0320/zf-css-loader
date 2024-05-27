@@ -1,25 +1,20 @@
 (() => {
   var webpackModules = {
-    './src/index.css': (module, __unused_webpack_exports, webpackRequire) => {
-      var cssLoaderApiNoSourcemapImport = webpackRequire(
-        './node_modules/css-loader/dist/runtime/noSourceMaps.js'
-      );
-      var cssLoaderApiImport = webpackRequire(
-        './node_modules/css-loader/dist/runtime/api.js'
-      );
-      var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);
-      cssLoaderExport.push([
-        module.id,
-        `body {
-  color: red;
-}
-`,
-        '',
-      ]);
-      module.exports = cssLoaderExport;
-    },
-    './node_modules/css-loader/dist/runtime/api.js': (module) => {
-      'use strict';
+    './loaders/css-loader/index.js??ruleSet[1].rules[0].use[1]!./src/index.css':
+      (__unused_webpack_module, __unused_webpack_exports, webpackRequire) => {
+        var cssLoaderApiNoSourcemapImport = webpackRequire(
+          './loaders/css-loader/runtime/noSourceMaps.js'
+        );
+        var cssLoaderApiImport = webpackRequire(
+          './loaders/css-loader/runtime/api.js'
+        );
+
+        __unused_webpack_module.exports = `body {
+          color: red;
+        }
+        `;
+      },
+    './loaders/css-loader/runtime/api.js': (module) => {
       module.exports = function (cssWithMappingToString) {
         var list = [];
         list.toString = function toString() {
@@ -32,11 +27,22 @@
         return list;
       };
     },
-    './node_modules/css-loader/dist/runtime/noSourceMaps.js': (module) => {
-      'use strict';
+    './loaders/css-loader/runtime/noSourceMaps.js': (module) => {
       module.exports = function (i) {
         return i[1];
       };
+    },
+    './src/index.css': (
+      __unused_webpack_module,
+      __unused_webpack_exports,
+      webpackRequire
+    ) => {
+      let content = webpackRequire(
+        './loaders/css-loader/index.js??ruleSet[1].rules[0].use[1]!./src/index.css'
+      );
+      let element = document.createElement('style');
+      element.innerHTML = content.toString();
+      document.head.appendChild(element);
     },
   };
   var webpackModuleCache = {};
@@ -46,7 +52,6 @@
       return cachedModule.exports;
     }
     var module = (webpackModuleCache[moduleId] = {
-      id: moduleId,
       exports: {},
     });
     webpackModules[moduleId](module, module.exports, webpackRequire);
@@ -54,7 +59,6 @@
   }
   var webpackExports = {};
   (() => {
-    debugger;
     const indexCss = webpackRequire('./src/index.css');
     console.log(indexCss);
   })();
