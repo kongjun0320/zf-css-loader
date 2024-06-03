@@ -20,13 +20,17 @@
         var cssLoaderApiImport = webpackRequire(
           './node_modules/css-loader/dist/runtime/api.js'
         );
+        // 1、
         var cssLoaderGetUrlImport = webpackRequire(
           './node_modules/css-loader/dist/runtime/getUrl.js'
         );
+        // 2、加载图片，获取图片的路径
         var cssLoaderUrlImport0 = webpackRequire('./src/images/kj.jpeg');
         var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);
+        // 3、把图片的路径交给
         var cssLoaderUrlReplacement0 =
           cssLoaderGetUrlImport(cssLoaderUrlImport0);
+        // 4、把 css 内容进行替换
         cssLoaderExport.push([
           module.id,
           `body {

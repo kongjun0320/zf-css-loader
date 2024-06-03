@@ -1,3 +1,5 @@
 body {
   color: red;
+  background-image: url('./images/kj.jpeg');
+  background-repeat: no-repeat;
 }
