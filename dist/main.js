@@ -1,18 +1,16 @@
 (() => {
   var webpackModules = {
     './loaders/css-loader/index.js??ruleSet[1].rules[0].use[1]!./src/index.css':
-      (__unused_webpack_module, __unused_webpack_exports, webpackRequire) => {
+      (module, __unused_webpack_exports, webpackRequire) => {
         var cssLoaderApiNoSourcemapImport = webpackRequire(
           './loaders/css-loader/runtime/noSourceMaps.js'
         );
         var cssLoaderApiImport = webpackRequire(
           './loaders/css-loader/runtime/api.js'
         );
-
-        __unused_webpack_module.exports = `body {
-          color: red;
-        }
-        `;
+        var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);
+        cssLoaderExport.push([module.id, 'body {\n  color: red;\n}\n', '']);
+        module.exports = cssLoaderExport;
       },
     './loaders/css-loader/runtime/api.js': (module) => {
       module.exports = function (cssWithMappingToString) {
@@ -52,6 +50,7 @@
       return cachedModule.exports;
     }
     var module = (webpackModuleCache[moduleId] = {
+      id: moduleId,
       exports: {},
     });
     webpackModules[moduleId](module, module.exports, webpackRequire);

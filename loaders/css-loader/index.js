@@ -1,4 +1,9 @@
-const { getImportCode, stringifyRequest } = require('./utils');
+const {
+  getImportCode,
+  stringifyRequest,
+  getModuleCode,
+  getExportCode,
+} = require('./utils');
 
 /**
  *
@@ -7,6 +12,7 @@ const { getImportCode, stringifyRequest } = require('./utils');
 function loader(content) {
   // 调用 async 方法可以把同步变成异步执行
   const callback = this.async();
+  const options = this.getOptions();
   const imports = [
     {
       importName: 'cssLoaderApiNoSourcemapImport',
@@ -18,8 +24,8 @@ function loader(content) {
     },
   ];
   const importCode = getImportCode(imports);
-  const moduleCode = '';
-  const exportCode = '';
+  const moduleCode = getModuleCode({ css: content });
+  const exportCode = getExportCode(options);
   callback(null, `${importCode}${moduleCode}${exportCode}`);
 }
 

@@ -10,14 +10,7 @@
       );
       // 模块代码
       var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);
-      cssLoaderExport.push([
-        module.id,
-        `body {
-  color: red;
-}
-`,
-        '',
-      ]);
+      cssLoaderExport.push([module.id, `body {color: red;}`, '']);
       // 导出
       module.exports = cssLoaderExport;
     },
