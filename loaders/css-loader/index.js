@@ -24,8 +24,8 @@ function loader(content) {
     plugins.push(
       urlParser({
         imports: urlPluginImports,
-        urlHandler: (url) => stringifyRequest(this, url),
         replacements,
+        urlHandler: (url) => stringifyRequest(this, url),
       })
     );
   }
@@ -36,8 +36,6 @@ function loader(content) {
       to: this.resourcePath,
     })
     .then((result) => {
-      // console.log('css >>> ', result.css);
-      // console.log('replacements >>> ', replacements);
       const imports = [
         {
           importName: 'cssLoaderApiNoSourcemapImport',
@@ -51,7 +49,6 @@ function loader(content) {
           url: stringifyRequest(this, require.resolve('./runtime/api')),
         },
       ];
-      // console.log('urlPluginImports >>> ', urlPluginImports);
       imports.push(...urlPluginImports);
       const importCode = getImportCode(imports);
       const moduleCode = getModuleCode(result, replacements);

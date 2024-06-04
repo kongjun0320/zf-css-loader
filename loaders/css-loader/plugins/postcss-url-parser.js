@@ -1,5 +1,4 @@
 const valueParser = require('postcss-value-parser');
-const { stringifyRequest } = require('../utils');
 
 /**
  * 此插件的功能是要找到 css 源代码中的 url 地址
@@ -24,7 +23,6 @@ const plugin = ({ imports, urlHandler, replacements }) => {
         },
         // 用于处理结束时的逻辑
         OnceExit() {
-          //   console.log('parsedDeclarations >>> ', parsedDeclarations);
           // 如果 css 中没有引入任何的 url 地址，直接返回
           if (parsedDeclarations.length === 0) {
             return;
@@ -42,7 +40,7 @@ const plugin = ({ imports, urlHandler, replacements }) => {
             imports.push({
               type: 'url', // 只是用来标识一下，是什么原因导致引入的此模块
               importName,
-              url: JSON.stringify(url),
+              url,
             });
             // 为当前的 url 地址生成一个新的替换名称
             // 这个变量有点像占位符
@@ -87,8 +85,8 @@ function parsedDeclaration(declaration) {
       parsedURLs.push({
         declaration, // 声明本身  background-image: url('./images/kj.jpeg');
         node: nodes[0], // {value: './images/kj.jpeg'}
-        url,
-        parsed,
+        url, //  './images/kj.jpeg'
+        parsed, // 当前声明的节点语法树
       });
     }
   });

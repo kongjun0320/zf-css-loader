@@ -17,7 +17,8 @@ function getModuleCode(result, replacements) {
     beforeCode += `var ${replacementName} = cssLoaderGetUrlImport(${importName});`;
 
     code = code.replace(
-      new RegExp(replacementName, 'g', () => `"+${replacementName}+"`)
+      new RegExp(replacementName, 'g'),
+      () => `"+${replacementName}+"`
     );
   }
 
@@ -26,7 +27,7 @@ function getModuleCode(result, replacements) {
 
 function getExportCode(options) {
   return options.esModule
-    ? `export default cssLoaderExport;`
+    ? `export default cssLoaderExport`
     : `module.exports = cssLoaderExport;`;
 }
 
