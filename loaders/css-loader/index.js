@@ -3,9 +3,12 @@ const {
   stringifyRequest,
   getModuleCode,
   getExportCode,
+  getPreRequester,
+  combineRequests,
 } = require('./utils');
 const postcss = require('postcss');
 const urlParser = require('./plugins/postcss-url-parser');
+const importerParser = require('./plugins/postcss-importer-parser');
 /**
  *
  * @param {*} content 将要转换的 CSS 文件的源代码
@@ -20,6 +23,26 @@ function loader(content) {
   const replacements = [];
   // 由于 url 插件导致的新导入的模块
   const urlPluginImports = [];
+  // 定义将要通过 import 导入引入的模块
+  const importPluginImports = [];
+  const importPluginApi = [];
+  if (options.import) {
+    plugins.push(
+      importerParser({
+        imports: importPluginImports,
+        loaderContext: this,
+        api: importPluginApi,
+        // 可以把绝对路径，变成相对路径
+        urlHandler: (url) =>
+          stringifyRequest(
+            this,
+            // getPreRequester(this, options) 要执行的 loader -> -!css-loader!logger-loader2!
+            // url 代表要处理的文件的路径 basic.css
+            combineRequests(getPreRequester(this, options), url) // -!css-loader!logger-loader2!basic.css
+          ),
+      })
+    );
+  }
   if (options.url) {
     plugins.push(
       urlParser({
@@ -49,9 +72,9 @@ function loader(content) {
           url: stringifyRequest(this, require.resolve('./runtime/api')),
         },
       ];
-      imports.push(...urlPluginImports);
+      imports.push(...importPluginImports, ...urlPluginImports);
       const importCode = getImportCode(imports);
-      const moduleCode = getModuleCode(result, replacements);
+      const moduleCode = getModuleCode(result, importPluginApi, replacements);
       const exportCode = getExportCode(options);
       callback(null, `${importCode}${moduleCode}${exportCode}`);
     });

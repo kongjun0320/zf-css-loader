@@ -19,7 +19,13 @@ module.exports = {
             options: {
               esModule: false,
               url: true,
+              import: true, // 支持 import 导入别的 css 文件
+              // 在处理包含的 css 之前要执行几个 前置 loader
+              importLoaders: 0,
             },
+          },
+          {
+            loader: path.resolve(__dirname, 'loaders/logger-loader'),
           },
         ],
       },
