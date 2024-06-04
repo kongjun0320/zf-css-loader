@@ -7,10 +7,20 @@ function getImportCode(imports) {
   return code;
 }
 
-function getModuleCode(result) {
+function getModuleCode(result, replacements) {
   // 获取 css 的文本内容
   let code = JSON.stringify(result.css);
   let beforeCode = `var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);\n`;
+
+  for (const item of replacements) {
+    const { importName, replacementName } = item;
+    beforeCode += `var ${replacementName} = cssLoaderGetUrlImport(${importName});`;
+
+    code = code.replace(
+      new RegExp(replacementName, 'g', () => `"+${replacementName}+"`)
+    );
+  }
+
   return `${beforeCode} cssLoaderExport.push([module.id, ${code}, '']);`;
 }
 

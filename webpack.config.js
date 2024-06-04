@@ -14,8 +14,8 @@ module.exports = {
             // loader: 'style-loader',
           },
           {
-            loader: 'css-loader',
-            // loader: path.resolve('loaders/css-loader'),
+            // loader: 'css-loader',
+            loader: path.resolve('loaders/css-loader'),
             options: {
               esModule: false,
               url: true,
