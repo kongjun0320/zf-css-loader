@@ -9,6 +9,7 @@
           './node_modules/css-loader/dist/runtime/api.js'
         );
         var cssLoaderExport = cssLoaderApiImport(cssLoaderApiNoSourcemapImport);
+        // 1.
         cssLoaderExport.push([
           module.id,
           `.tTVAWtb51GjW37uc5IbF {
@@ -19,6 +20,7 @@
 `,
           '',
         ]);
+        // 2.
         cssLoaderExport.locals = {
           background: `tTVAWtb51GjW37uc5IbF`,
         };

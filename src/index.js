@@ -1,3 +1,8 @@
-const indexCss = require('./index.css')
+const modulesCss = require('./modules.css');
 
-console.log(indexCss);
+const div = document.createElement('div');
+div.className = modulesCss.locals.background;
+
+document.body.appendChild(div);
+
+console.log(modulesCss);
