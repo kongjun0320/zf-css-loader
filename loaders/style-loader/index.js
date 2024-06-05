@@ -13,7 +13,7 @@ loader.pitch = function (remainingRequest) {
   let contentCode = `
     let content = require('${stringifyRequest(this, `!!${remainingRequest}`)}');
     let element = document.createElement('style');
-    element.innerHTML = content.toString();
+    element.innerHTML = (content.default || content).toString();
     document.head.appendChild(element);
     module.exports = content;
   `;

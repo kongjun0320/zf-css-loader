@@ -5,10 +5,12 @@ const {
   getExportCode,
   getPreRequester,
   combineRequests,
+  getModulePlugins,
 } = require('./utils');
 const postcss = require('postcss');
 const urlParser = require('./plugins/postcss-url-parser');
 const importerParser = require('./plugins/postcss-importer-parser');
+const icssParser = require('./plugins/postcss-icss-parser');
 /**
  *
  * @param {*} content 将要转换的 CSS 文件的源代码
@@ -21,6 +23,17 @@ function loader(content) {
   const plugins = [];
   // 替换的变量名
   const replacements = [];
+  const exports = [];
+  // 如果 modules 为 true
+  if (options.modules) {
+    plugins.push(...getModulePlugins(this));
+    plugins.push(
+      icssParser({
+        loaderContext: this,
+        exports,
+      })
+    );
+  }
   // 由于 url 插件导致的新导入的模块
   const urlPluginImports = [];
   // 定义将要通过 import 导入引入的模块
@@ -75,7 +88,7 @@ function loader(content) {
       imports.push(...importPluginImports, ...urlPluginImports);
       const importCode = getImportCode(imports);
       const moduleCode = getModuleCode(result, importPluginApi, replacements);
-      const exportCode = getExportCode(options);
+      const exportCode = getExportCode(exports, options);
       callback(null, `${importCode}${moduleCode}${exportCode}`);
     });
 }
